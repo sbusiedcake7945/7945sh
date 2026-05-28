@@ -1,6 +1,11 @@
 # 7945sh
 Custom fast interactive Linux shell with live syntax highlighting and autocomplete.
 
+## dependencies
+```sh
+pip install prompt_toolkit pyinstaller
+```
+
 ## how to compile and package
 ### step 1: clone the repository
 ```sh

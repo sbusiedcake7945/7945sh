@@ -1,7 +1,9 @@
 #!/bin/bash
 set -e
+trap 'echo "ERROR: Script failed at line $LINENO"' ERR
 
-CWD="/home/busiedcake7945/Masaüstü/projects/terminal"
+CWD=$(dirname "$(realpath "$0")")
+VERSION="1.0.0"
 BUILD_DIR="$CWD/build_packages"
 OUT_DIR="$CWD/7945shpkg"
 
@@ -12,7 +14,7 @@ mkdir -p "$BUILD_DIR"
 mkdir -p "$OUT_DIR"
 
 # Clean old packages at root
-rm -f "$CWD"/7945sh_1.0.0_amd64.deb "$CWD"/7945sh-1.0.0-1-x86_64.pkg.tar.zst "$CWD"/7945sh-1.0.0-1.x86_64.rpm
+rm -f "$CWD"/7945sh_${VERSION}_amd64.deb "$CWD"/7945sh-${VERSION}-1-x86_64.pkg.tar.zst "$CWD"/7945sh-${VERSION}-1.x86_64.rpm
 
 # Step 1: Ensure up-to-date shell binary
 echo "=== Building shell executable binary ==="
@@ -31,9 +33,9 @@ DEB_STAGE="$BUILD_DIR/deb"
 mkdir -p "$DEB_STAGE/DEBIAN"
 cp -r "$ROOT_DIR/usr" "$DEB_STAGE/"
 
-cat << 'EOF' > "$DEB_STAGE/DEBIAN/control"
+cat << EOF > "$DEB_STAGE/DEBIAN/control"
 Package: 7945sh
-Version: 1.0.1
+Version: ${VERSION}
 Section: utils
 Priority: optional
 Architecture: amd64
@@ -49,8 +51,8 @@ tar -cJf "$BUILD_DIR/data.tar.xz" usr
 echo "2.0" > "$BUILD_DIR/debian-binary"
 
 cd "$BUILD_DIR"
-ar rcs "$OUT_DIR/7945sh_1.0.0_amd64.deb" debian-binary control.tar.gz data.tar.xz
-echo "-> DEB Package built successfully at 7945shpkg/7945sh_1.0.0_amd64.deb"
+ar rcs "$OUT_DIR/7945sh_${VERSION}_amd64.deb" debian-binary control.tar.gz data.tar.xz
+echo "-> DEB Package built successfully at 7945shpkg/7945sh_${VERSION}_amd64.deb"
 
 # ----------------- ARCH LINUX PACKAGE -----------------
 echo "=== Packaging Arch Linux (.pkg.tar.zst) ==="
@@ -58,9 +60,9 @@ ARCH_STAGE="$BUILD_DIR/arch"
 mkdir -p "$ARCH_STAGE"
 cp -r "$ROOT_DIR/usr" "$ARCH_STAGE/"
 
-cat << 'EOF' > "$ARCH_STAGE/.PKGINFO"
+cat << EOF > "$ARCH_STAGE/.PKGINFO"
 pkgname = 7945sh
-pkgver = 1.0.1-1
+pkgver = $VERSION-1
 pkgdesc = Custom fast interactive Linux shell with live syntax highlighting and autocomplete
 url = https://github.com/busiedcake7945/terminal
 arch = x86_64
@@ -68,8 +70,8 @@ license = MIT
 EOF
 
 cd "$ARCH_STAGE"
-tar -I 'zstd' -cf "$OUT_DIR/7945sh-1.0.0-1-x86_64.pkg.tar.zst" .PKGINFO usr
-echo "-> Arch Package built successfully at 7945shpkg/7945sh-1.0.0-1-x86_64.pkg.tar.zst"
+tar -I 'zstd' -cf "$OUT_DIR/7945sh-${VERSION}-1-x86_64.pkg.tar.zst" .PKGINFO usr
+echo "-> Arch Package built successfully at 7945shpkg/7945sh-${VERSION}-1-x86_64.pkg.tar.zst"
 
 # ----------------- RPM PACKAGE -----------------
 echo "=== Packaging RPM (.rpm) ==="
@@ -78,9 +80,9 @@ mkdir -p "$RPM_TOP"/{SPECS,SOURCES,BUILD,RPMS,SRPMS}
 
 cp "$CWD/7945sh" "$RPM_TOP/SOURCES/"
 
-cat << 'EOF' > "$RPM_TOP/SPECS/7945sh.spec"
+cat << EOF > "$RPM_TOP/SPECS/7945sh.spec"
 Name:           7945sh
-Version:        1.0.1
+Version:        $VERSION
 Release:        1%{?dist}
 Summary:        Custom fast interactive Linux shell with live syntax highlighting and autocomplete
 
@@ -108,8 +110,8 @@ cp %{_sourcedir}/7945sh %{buildroot}/usr/bin/7945sh
 EOF
 
 rpmbuild --define "_topdir $RPM_TOP" -bb "$RPM_TOP/SPECS/7945sh.spec"
-cp "$RPM_TOP"/RPMS/x86_64/7945sh-1.0.0-1.*.rpm "$OUT_DIR/7945sh-1.0.0-1.x86_64.rpm"
-echo "-> RPM Package built successfully at 7945shpkg/7945sh-1.0.0-1.x86_64.rpm"
+cp "$RPM_TOP"/RPMS/x86_64/7945sh-1.0.0-1.*.rpm "$OUT_DIR/7945sh-${VERSION}-1.x86_64.rpm"
+echo "-> RPM Package built successfully at 7945shpkg/7945sh-${VERSION}-1.x86_64.rpm"
 
 # Clean up temp builds
 rm -rf "$BUILD_DIR"

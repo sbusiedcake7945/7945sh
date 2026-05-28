@@ -42,7 +42,7 @@ SYNTAX_COLORS = {
 }
 
 DEFAULT_RC = """# 7945sh RC
-PROMPT="{GREEN}{user}@{host}:{BLUE}{path{RESET}$"
+PROMPT="{GREEN}{user}@{host}:{BLUE}{path}{RESET}$"
 BLUE=\\x1b[38;5;45m
 CYAN=\\x1b[38;5;51m
 RED=\\x1b[31m
