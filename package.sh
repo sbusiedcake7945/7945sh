@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-CWD="/home/busiedcake7945/Masaüstü/projects/terminal"
+CWD="{dirname}"
 BUILD_DIR="$CWD/build_packages"
 OUT_DIR="$CWD/7945shpkg"
 
