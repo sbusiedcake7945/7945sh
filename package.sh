@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-CWD="{dirname}"
+CWD="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" 
 BUILD_DIR="$CWD/build_packages"
 OUT_DIR="$CWD/7945shpkg"
 
