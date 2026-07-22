@@ -4,7 +4,7 @@ Custom fast interactive Linux shell with live syntax highlighting and autocomple
 ## how to compile and package
 ### step 1: clone the repository
 ```sh
-git clone https://github.com/abusiedcake7945/7945sh
+git clone https://github.com/sbusiedcake7945/7945sh
 ```
 ### step 2: go to 7945sh path
 ```sh
