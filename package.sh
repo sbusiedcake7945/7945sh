@@ -85,7 +85,7 @@ Release:        1%{?dist}
 Summary:        Custom fast interactive Linux shell with live syntax highlighting and autocomplete
 
 License:        MIT
-URL:            https://github.com/busiedcake7945/terminal
+URL:            https://github.com/sbusiedcake7945/7945sh
 
 # Disable debuginfo package
 %define debug_package %{nil}
